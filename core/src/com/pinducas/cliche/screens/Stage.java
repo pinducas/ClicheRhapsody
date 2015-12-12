@@ -1,9 +1,11 @@
 package com.pinducas.cliche.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.World;
 import com.pinducas.cliche.core.MyGame;
 
 public class Stage {
@@ -28,7 +30,6 @@ public class Stage {
 	}
 	
 	public void init(){
-		
 	}
 	
 	public void update(float delta){

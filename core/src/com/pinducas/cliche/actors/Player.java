@@ -6,6 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Player extends Actor {
 
@@ -21,7 +27,8 @@ public class Player extends Actor {
 
 	private Animation walk_animation;
 	
-	public Player(){
+	public Player(World world, int x, int y){
+		CriaCorpo(world, x, y);
 		sheet = new Texture(Gdx.files.internal("Teste/Sheet.png"));
 		
 		TextureRegion [] walk_region = new TextureRegion[4];
@@ -37,32 +44,61 @@ public class Player extends Actor {
 		init();
 	}
 	
+	
+	
+	
+	private void CriaCorpo(World world, int x, int y){
+		BodyDef bodyDef = new BodyDef();  
+	    bodyDef.type = BodyType.DynamicBody;  
+	    bodyDef.position.set(x,y);  
+	    
+	    body = world.createBody(bodyDef);
+	    
+	    PolygonShape shape = new PolygonShape();
+	    //aqui o valor eh da metade do raio do quadrado. Como o seu sprite tem 32 pixels...
+	    shape.setAsBox(32/2, 32/2);
+	    
+	    FixtureDef fixtureDef = new FixtureDef();  
+	    fixtureDef.shape = shape;  
+	    fixtureDef.density = 0.1f;  
+	    fixtureDef.friction = 0.0f;  
+	    fixtureDef.restitution = 0.3f;
+	    
+	    body.createFixture(fixtureDef);
+	    body.setFixedRotation(true);	    
+	    
+	}
+	
 	@Override
 	public void init(){
 		position = new float[2];
-		position[0] = 1000;
-		position[1] = 100;
+		position[0] = this.body.getPosition().x;
+		position[1] = this.body.getPosition().x;
 		walk_delta = 0;
 		facingRight = true;
 	}
 	
 	@Override
 	public void update(float delta){
-	
+		position[0] = this.getX();
+		position[1] = this.getY();
+		
+		int deltaX = 0;
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-			position[0] += delta * 200;
+			deltaX = 5;
 			facingRight = true;
 			walk_delta += delta;
 		}
 		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-			position[0] -= delta * 200;
+			deltaX = -5;
 			facingRight = false;
 			walk_delta += delta;
 
 		}else{
 			walk_delta =  0;
 		}
+		movimenta(deltaX, 0);
 		
 	}
 	
@@ -72,7 +108,7 @@ public class Player extends Actor {
 		
 		if(currentFrame.isFlipX() == facingRight)currentFrame.flip(true, false);
 		
-		batch.draw(currentFrame,position[0],position[1],16,0,32,32,4,4,0);
+		batch.draw(currentFrame,position[0] - 32/2,position[1]- 32/2,16,0,32,32,1,1,0);
 		
 	}
 	
