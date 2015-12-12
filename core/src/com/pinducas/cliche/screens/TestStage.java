@@ -6,9 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.pinducas.cliche.actors.Player;
 
 public class TestStage extends Stage implements Screen{
 		
+	private Player player;
+	
 	public TestStage(){
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false,800,600);
@@ -17,13 +20,16 @@ public class TestStage extends Stage implements Screen{
 		
 		initController();
 		
+		player = new Player();
+		
 		init();
 	}
 	
 	public void init(){
 		//This method will start all stage variables and will be called when the player restarts a stage
 		disposed = false;
-		
+		player.position[0] = 100;
+		player.position[1] = 100;
 	}
 	
 	@Override
@@ -31,6 +37,9 @@ public class TestStage extends Stage implements Screen{
 		//Do the update here
 		if(gamepad == null)keyboardControls();
 		else gamepadControls();
+		
+		player.update(delta);
+		
 		camera.update();
 	}
 	
@@ -40,6 +49,7 @@ public class TestStage extends Stage implements Screen{
 		batch.begin();
 		//Draw here
 		
+		player.draw(batch);
 		
 		batch.end();
 	}

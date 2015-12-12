@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Actor {
 	
-	public TextureRegion current_frame;
+	public boolean facingRight;
+	
+	public TextureRegion currentFrame;
 	
 	public void init(){
 		
