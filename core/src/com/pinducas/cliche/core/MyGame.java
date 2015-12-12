@@ -7,11 +7,13 @@ public class MyGame extends Game {
 	
 	@Override
 	public void create () {
-		setScreen(new TestStage());		
+		setScreen(new TestStage(this));		
 	}
 
 	@Override
 	public void render () {
 		super.render();
 	}
+	
+	
 }

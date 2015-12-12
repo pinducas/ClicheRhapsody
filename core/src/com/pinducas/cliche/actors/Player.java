@@ -49,15 +49,19 @@ public class Player extends Actor {
 	@Override
 	public void update(float delta){
 	
-		walk_delta += delta;
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
 			position[0] += delta * 200;
 			facingRight = true;
+			walk_delta += delta;
 		}
 		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			position[0] -= delta * 200;
 			facingRight = false;
+			walk_delta += delta;
+
+		}else{
+			walk_delta =  0;
 		}
 		
 	}

@@ -7,14 +7,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pinducas.cliche.actors.Player;
+import com.pinducas.cliche.core.MyGame;
 
 public class TestStage extends Stage implements Screen{
 		
 	private Player player;
 	
-	public TestStage(){
+	public TestStage(MyGame game){
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false,800,600);
+		
+		this.game = game;
 		
 		batch = new SpriteBatch();
 		
