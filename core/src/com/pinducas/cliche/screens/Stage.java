@@ -9,9 +9,15 @@ import com.pinducas.cliche.core.MyGame;
 
 public class Stage {
 	
+	protected final float BOX_TIME_STEP = 1/60.f;
+	protected final int BOX_VELOCITY_ITERATIONS = 6;
+	protected final int BOX_POSITION_ITERATIONS = 2;
+	
 	//PRIMITIVES
 	public boolean disposed;
 		
+	protected float acumulator;
+	
 	//NULLABLE
 	protected MyGame game;
 	protected OrthographicCamera camera;
@@ -29,7 +35,20 @@ public class Stage {
 		gamepad = c;
 	}
 	
+	public void worldStep(float delta){
+		//LIBGDX doc says this is good for slower machines
+		float frameTime = Math.min(delta, 0.25f);
+		acumulator += frameTime;
+		while(acumulator >= BOX_TIME_STEP){
+		      world.step(BOX_TIME_STEP,BOX_VELOCITY_ITERATIONS,BOX_POSITION_ITERATIONS);
+		      acumulator -= BOX_TIME_STEP;
+		}
+	}
+	
 	public void init(){
+		disposed = false;
+		acumulator = 0;
+	
 	}
 	
 	public void update(float delta){

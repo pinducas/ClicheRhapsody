@@ -36,13 +36,14 @@ public class TestStage extends Stage implements Screen{
 	}
 	
 	public void init(){
+		super.init();
 		//This method will start all stage variables and will be called when the player restarts a stage
-		disposed = false;
+		
 	}
 	
 	@Override
 	public void update(float delta){
-		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+		worldStep(delta);
 		
 		//Do the update here		
 		player.update(delta);
@@ -91,7 +92,6 @@ public class TestStage extends Stage implements Screen{
 		//brender.render(world, camera.combined);
 		
 		//As i nulled and disposed some box2d elements lets leave this one here as well
-		if(disposed)return;
 		update(delta);
 		//This statement makes sure no disposed object is drawn
 		if(disposed)return;

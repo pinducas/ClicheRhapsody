@@ -28,8 +28,11 @@ public class Player extends Actor {
 	
 	public Player(World world, int x, int y){
 		CriaCorpo(world, x, y);
+		
+		//IMAGE LOADING
 		sheet = new Texture(Gdx.files.internal("Teste/Sheet.png"));
 		
+		//WALK ANIMATION
 		TextureRegion [] walk_region = new TextureRegion[4];
 		walk_region[0] = new TextureRegion(sheet,0,0,32,32);
 		walk_region[1] = new TextureRegion(sheet,32,0,32,32);
@@ -40,6 +43,8 @@ public class Player extends Actor {
 		
 		currentFrame = walk_animation.getKeyFrame(walk_delta,true);
 		
+		
+		
 		init();
 	}
 	
@@ -47,25 +52,26 @@ public class Player extends Actor {
 	
 	
 	private void CriaCorpo(World world, int x, int y){
-		bodyDef = new BodyDef();  
+		BodyDef bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
 	    bodyDef.position.set(x,y);
 	    
 	    body = world.createBody(bodyDef);
 	    
-	    shape = new PolygonShape();
+	    PolygonShape shape = new PolygonShape();
 	    //aqui o valor eh da metade do raio do quadrado. Como o seu sprite tem 32 pixels...
 	    shape.setAsBox(16*4, 16*4);
 	    
-	    fixtureDef = new FixtureDef();  
+	    FixtureDef fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = shape;  
 	    fixtureDef.density = 0.1f;  
 	    fixtureDef.friction = 0.0f;  
-	    fixtureDef.restitution = 0.3f;
+	    fixtureDef.restitution = 0f;
 	    
 	    body.createFixture(fixtureDef);
 	    body.setFixedRotation(true);	    
-	    
+	   
+	    shape.dispose();
 	}
 	
 	@Override
@@ -116,9 +122,6 @@ public class Player extends Actor {
 	@Override
 	public void dispose(){
 		body = null;
-		fixtureDef = null;
-		bodyDef = null;
-		shape.dispose();
 		walk_animation = null;
 		currentFrame = null;
 		sheet.dispose();
