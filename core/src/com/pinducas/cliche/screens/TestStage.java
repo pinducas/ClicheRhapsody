@@ -13,23 +13,20 @@ import com.pinducas.cliche.actors.Player;
 import com.pinducas.cliche.core.MyGame;
 
 public class TestStage extends Stage implements Screen{
-		
-	private World world;
+	
 	private Box2DDebugRenderer brender;
 	private Player player;
 	
 	public TestStage(MyGame game){
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false,800,600);
+		
 		world = new World(new Vector2(0, 0), true);
-		brender = new Box2DDebugRenderer();		
 		
-		
-		
-		
-		this.game = game;
-		
+		brender = new Box2DDebugRenderer();	
 		batch = new SpriteBatch();
+		
+		this.game = game;	
 		
 		initController();
 		
@@ -47,13 +44,13 @@ public class TestStage extends Stage implements Screen{
 	public void update(float delta){
 		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 		
-		//Do the update here
-		if(gamepad == null)keyboardControls();
-		else gamepadControls();
-		
+		//Do the update here		
 		player.update(delta);
 		
 		camera.update();
+		
+		if(gamepad == null)keyboardControls();
+		else gamepadControls();
 	}
 	
 	@Override
@@ -89,8 +86,12 @@ public class TestStage extends Stage implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		brender.render(world, camera.combined);
 		
+		//There were two calls for this method
+		//brender.render(world, camera.combined);
+		
+		//As i nulled and disposed some box2d elements lets leave this one here as well
+		if(disposed)return;
 		update(delta);
 		//This statement makes sure no disposed object is drawn
 		if(disposed)return;
@@ -99,7 +100,13 @@ public class TestStage extends Stage implements Screen{
 
 	@Override
 	public void dispose() {
+		game = null;
+		camera = null;
+		gamepad = null;
+		brender.dispose();
+		world.dispose();
 		batch.dispose();
+		player.dispose();
 	}
 	
 	

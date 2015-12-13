@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -16,8 +15,8 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Player extends Actor {
 
 	//PRIMITIVES
-	public float [] position;
 	private float walk_delta;
+	public float [] position;
 	
 	//DISPOSABLE
 	private Texture sheet;
@@ -48,17 +47,17 @@ public class Player extends Actor {
 	
 	
 	private void CriaCorpo(World world, int x, int y){
-		BodyDef bodyDef = new BodyDef();  
+		bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
-	    bodyDef.position.set(x,y);  
+	    bodyDef.position.set(x,y);
 	    
 	    body = world.createBody(bodyDef);
 	    
-	    PolygonShape shape = new PolygonShape();
+	    shape = new PolygonShape();
 	    //aqui o valor eh da metade do raio do quadrado. Como o seu sprite tem 32 pixels...
-	    shape.setAsBox(32/2, 32/2);
+	    shape.setAsBox(16*4, 16*4);
 	    
-	    FixtureDef fixtureDef = new FixtureDef();  
+	    fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = shape;  
 	    fixtureDef.density = 0.1f;  
 	    fixtureDef.friction = 0.0f;  
@@ -73,16 +72,13 @@ public class Player extends Actor {
 	public void init(){
 		position = new float[2];
 		position[0] = this.body.getPosition().x;
-		position[1] = this.body.getPosition().x;
+		position[1] = this.body.getPosition().y;
 		walk_delta = 0;
 		facingRight = true;
 	}
 	
 	@Override
-	public void update(float delta){
-		position[0] = this.getX();
-		position[1] = this.getY();
-		
+	public void update(float delta){		
 		int deltaX = 0;
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
@@ -98,8 +94,13 @@ public class Player extends Actor {
 		}else{
 			walk_delta =  0;
 		}
+		
+		
 		movimenta(deltaX, 0);
 		
+		
+		position[0] = this.getX();
+		position[1] = this.getY();
 	}
 	
 	@Override
@@ -108,12 +109,16 @@ public class Player extends Actor {
 		
 		if(currentFrame.isFlipX() == facingRight)currentFrame.flip(true, false);
 		
-		batch.draw(currentFrame,position[0] - 32/2,position[1]- 32/2,16,0,32,32,1,1,0);
+		batch.draw(currentFrame,position[0]+32,position[1]+32,32,32,32,32,4,4,0);
 		
 	}
 	
 	@Override
 	public void dispose(){
+		body = null;
+		fixtureDef = null;
+		bodyDef = null;
+		shape.dispose();
 		walk_animation = null;
 		currentFrame = null;
 		sheet.dispose();

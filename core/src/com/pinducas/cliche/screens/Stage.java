@@ -1,6 +1,5 @@
 package com.pinducas.cliche.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,6 +18,7 @@ public class Stage {
 	protected Controller gamepad;
 		
 	//DISPOSABLE
+	protected World world;
 	protected SpriteBatch batch;
 	
 	public void initController(){

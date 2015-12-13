@@ -1,19 +1,25 @@
 package com.pinducas.cliche.actors;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 public class Actor {
 	
 	public boolean facingRight;	
+	
+	//NULLABLE
 	public TextureRegion currentFrame;
 	protected Body body;
-
+	protected FixtureDef fixtureDef;
+	protected BodyDef bodyDef;
 	
-	
+	//DISPOSABLE
+	//Added this guy here because he needs to be disposed at the end of the code
+	protected PolygonShape shape;
 	
 	protected void movimenta(int x, int y){
 		body.setTransform(getX() + x, getY() + y, 0);
