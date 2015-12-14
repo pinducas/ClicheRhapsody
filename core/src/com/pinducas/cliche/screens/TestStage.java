@@ -30,7 +30,7 @@ public class TestStage extends Stage implements Screen{
 		
 		initController();
 		
-		player = new Player(world, 300 , 300);
+		player = new Player(world,gamepad, 300 , 300);
 		
 		init();
 	}

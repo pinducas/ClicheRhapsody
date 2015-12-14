@@ -2,10 +2,13 @@ package com.pinducas.cliche.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -13,21 +16,28 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Player extends Actor {
-
-	//PRIMITIVES
+	public final int IDLE = 0, WALK = 1;
+	
+	private int state;
+	private int subState;
+	
 	private float walk_delta;
-	public float [] position;
+	
+	public Vector2 position;
+	public Vector2 speed;
 	
 	//DISPOSABLE
 	private Texture sheet;
 	
 	//NULLABLE
 	public TextureRegion currentFrame;
-
 	private Animation walk_animation;
+	private Controller gamepad;
 	
-	public Player(World world, int x, int y){
+	public Player(World world,Controller gamepad, int x, int y){
 		CriaCorpo(world, x, y);
+		
+		this.gamepad = gamepad;
 		
 		//IMAGE LOADING
 		sheet = new Texture(Gdx.files.internal("Teste/Sheet.png"));
@@ -43,13 +53,108 @@ public class Player extends Actor {
 		
 		currentFrame = walk_animation.getKeyFrame(walk_delta,true);
 		
-		
-		
 		init();
 	}
 	
+	@Override
+	public void init(){
+		position = new Vector2();
+		position.x = this.body.getPosition().x;
+		position.y = this.body.getPosition().y;
+		
+		speed = new Vector2();
+		speed.x = 0;
+		speed.y = 0;
+		
+		walk_delta = 0;
+		state = IDLE;
+		subState = 0;
+		
+		facingRight = true;
+	}
 	
+	@Override
+	public void update(float delta){		
+		
+		if(gamepad == null)keyboardControl();
+		else gamepadControl();
+		
+		//STATE HANDLING
+		if(state == IDLE){
+			if(subState == 0){
+				//HERE HE COULD BE IN IDLE
+			}
+			else if(subState == 1){
+				//HERE HE COULD SLEEP BECAUSE THE PLAYER WAS STILL FOR TOO LONG
+			}
+		}
+		else if(state == WALK){
+			walk_delta += delta;
+		}
+		
+		movimenta(speed.x*delta, speed.y*delta);
+		
+		position.x = this.getX();
+		position.y = this.getY();
+	}
 	
+	@Override
+	public void draw(SpriteBatch batch){
+		currentFrame = walk_animation.getKeyFrame(walk_delta,true);
+		
+		if(currentFrame.isFlipX() == facingRight)currentFrame.flip(true, false);
+		
+		batch.draw(currentFrame,position.x+32,position.y+32,32,32,32,32,4,4,0);
+	}
+	
+	@Override
+	public void dispose(){
+		body = null;
+		gamepad = null;
+		walk_animation = null;
+		currentFrame = null;
+		sheet.dispose();
+	}
+	
+	private void keyboardControl(){
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+			facingRight = true;
+			state = WALK;
+			subState = 0;
+			speed.x = 10;
+		}
+		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+			facingRight = false;
+			state = WALK;
+			subState = 0;
+			speed.x = -10;
+		}
+		else{
+			walk_delta =  0;
+			state = IDLE;
+			speed.x = 0;
+		}
+	}
+	private void gamepadControl(){
+		if(gamepad.getPov(0) == PovDirection.east){
+			facingRight = true;
+			state = WALK;
+			subState = 0;
+			speed.x = 200f;
+		}
+		else if(gamepad.getPov(0) == PovDirection.west){
+			facingRight = false;
+			state = WALK;
+			subState = 0;
+			speed.x = -200f;
+		}
+		else{
+			walk_delta =  0;
+			state = IDLE;
+			speed.x = 0;
+		}
+		
+	}
 	
 	private void CriaCorpo(World world, int x, int y){
 		BodyDef bodyDef = new BodyDef();  
@@ -72,59 +177,6 @@ public class Player extends Actor {
 	    body.setFixedRotation(true);	    
 	   
 	    shape.dispose();
-	}
-	
-	@Override
-	public void init(){
-		position = new float[2];
-		position[0] = this.body.getPosition().x;
-		position[1] = this.body.getPosition().y;
-		walk_delta = 0;
-		facingRight = true;
-	}
-	
-	@Override
-	public void update(float delta){		
-		int deltaX = 0;
-		
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-			deltaX = 5;
-			facingRight = true;
-			walk_delta += delta;
-		}
-		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-			deltaX = -5;
-			facingRight = false;
-			walk_delta += delta;
-
-		}else{
-			walk_delta =  0;
-		}
-		
-		
-		movimenta(deltaX, 0);
-		
-		
-		position[0] = this.getX();
-		position[1] = this.getY();
-	}
-	
-	@Override
-	public void draw(SpriteBatch batch){
-		currentFrame = walk_animation.getKeyFrame(walk_delta,true);
-		
-		if(currentFrame.isFlipX() == facingRight)currentFrame.flip(true, false);
-		
-		batch.draw(currentFrame,position[0]+32,position[1]+32,32,32,32,32,4,4,0);
-		
-	}
-	
-	@Override
-	public void dispose(){
-		body = null;
-		walk_animation = null;
-		currentFrame = null;
-		sheet.dispose();
 	}
 	
 }

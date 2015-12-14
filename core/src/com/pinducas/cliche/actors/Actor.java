@@ -14,7 +14,7 @@ public class Actor {
 
 	//DISPOSABLE
 	
-	protected void movimenta(int x, int y){
+	protected void movimenta(float x, float y){
 		body.setTransform(getX() + x, getY() + y, 0);
 	}
 	
