@@ -5,7 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -23,6 +25,8 @@ public class TestStage extends Stage implements Screen{
 	
 	private Actor []shapes;
 	
+	private Texture skull;
+	
 	public TestStage(MyGame game){
 		camera = new OrthographicCamera();
 		//Changed dimensions to meters
@@ -34,9 +38,11 @@ public class TestStage extends Stage implements Screen{
 		
 		this.game = game;	
 		
+		skull = new Texture(Gdx.files.internal("Teste/goldskull.png"));
+		
 		shapes = new Actor[2];
-		shapes[0] = new Circle(world, 500, 200);
-		shapes[1] = new Box(world, 400,-100,800,300);
+		shapes[0] = new Circle(world,new TextureRegion(skull), 500, 200);
+		shapes[1] = new Box(world, 600,-100,1200,300);
 		
 		initController();
 		
@@ -60,6 +66,13 @@ public class TestStage extends Stage implements Screen{
 		//Do the update here		
 		player.update(delta);
 		
+		for(Actor a:shapes)a.update(delta);
+		
+		System.out.println("Player "+player.getX()+" Camera "+camera.position.x);
+		
+		if(player.getX() > camera.position.x + 5)camera.translate(player.getX()-camera.position.x-5,0);
+		if(player.getX() < camera.position.x - 5)camera.translate(player.getX()-camera.position.x+5,0);
+		
 		camera.update();
 		
 		if(gamepad == null)keyboardControls();
@@ -73,6 +86,7 @@ public class TestStage extends Stage implements Screen{
 		//Draw here	
 		
 		player.draw(batch);
+		for(Actor a:shapes)a.draw(batch);
 		
 		batch.end();
 		brender.render(world, camera.combined);
@@ -119,6 +133,7 @@ public class TestStage extends Stage implements Screen{
 		world.dispose();
 		batch.dispose();
 		player.dispose();
+		skull.dispose();
 	}
 	
 	

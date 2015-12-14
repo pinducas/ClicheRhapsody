@@ -19,6 +19,8 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Player extends Actor {
 	public final int IDLE = 0, WALK = 1;
 	
+	private boolean pressing_jump;
+	
 	private int state;
 	private int subState;
 	
@@ -71,6 +73,8 @@ public class Player extends Actor {
 		state = IDLE;
 		subState = 0;
 		
+		pressing_jump = false;
+		
 		facingRight = true;
 	}
 	
@@ -107,8 +111,8 @@ public class Player extends Actor {
 		
 		if(currentFrame.isFlipX() == facingRight)currentFrame.flip(true, false);
 		
-		batch.draw(currentFrame, getX() - 64 * Constants.pixelToMeter, getY()- 64 * Constants.pixelToMeter
-				,0,0,32,32,4 * Constants.pixelToMeter,4 * Constants.pixelToMeter,0);
+		batch.draw(currentFrame, getX() - 16 * Constants.pixelToMeter, getY()- 48 * Constants.pixelToMeter
+				,16*Constants.pixelToMeter,0,32* Constants.pixelToMeter,32* Constants.pixelToMeter,4,4 ,0);
 	}
 	
 	@Override
@@ -138,6 +142,9 @@ public class Player extends Actor {
 			state = IDLE;
 			speed.x = 0;
 		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+			body.applyLinearImpulse(0, 30, 0, 0, true);
+		}
 	}
 	private void gamepadControl(){
 		if(gamepad.getPov(0) == PovDirection.east){
@@ -157,6 +164,11 @@ public class Player extends Actor {
 			state = IDLE;
 			speed.x = 0;
 		}
+		if(gamepad.getButton(2) && !pressing_jump){
+			body.applyLinearImpulse(0, 30, 0, 0, true);
+			pressing_jump = true;
+		}
+		if(!gamepad.getButton(2))pressing_jump = false;
 		
 	}
 	
@@ -169,12 +181,12 @@ public class Player extends Actor {
 	    
 	    PolygonShape shape = new PolygonShape();
 	    //aqui o valor eh da metade do raio do quadrado. Como o seu sprite tem 32 pixels mas escalado 4 vezes...
-	    shape.setAsBox(16 * 4 * Constants.pixelToMeter, 16 * 4 * Constants.pixelToMeter);
+	    shape.setAsBox(10 * 4 * Constants.pixelToMeter, 12 * 4 * Constants.pixelToMeter);
 	    
 	    FixtureDef fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = shape;  
-	    fixtureDef.density = 0.1f;  
-	    fixtureDef.friction = 0.0f;  
+	    fixtureDef.density = 1f;  
+	    fixtureDef.friction = 0f;  
 	    fixtureDef.restitution = 0f;
 	    
 	    body.createFixture(fixtureDef);

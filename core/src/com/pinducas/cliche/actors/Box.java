@@ -27,7 +27,7 @@ public class Box extends Actor{
 	    FixtureDef fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = shape;  
 	    fixtureDef.density = 0.1f;  
-	    fixtureDef.friction = 0.0f;  
+	    fixtureDef.friction = 1f;  
 	    fixtureDef.restitution = 0f;
 	    
 	    body.createFixture(fixtureDef);
