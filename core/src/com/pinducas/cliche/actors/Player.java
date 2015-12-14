@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.pinducas.cliche.core.Constants;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -34,7 +35,7 @@ public class Player extends Actor {
 	private Animation walk_animation;
 	private Controller gamepad;
 	
-	public Player(World world,Controller gamepad, int x, int y){
+	public Player(World world,Controller gamepad, float x, float y){
 		CriaCorpo(world, x, y);
 		
 		this.gamepad = gamepad;
@@ -92,7 +93,9 @@ public class Player extends Actor {
 			walk_delta += delta;
 		}
 		
-		movimenta(speed.x*delta, speed.y*delta);
+		System.out.println(speed.x*delta*Constants.pixelToMeter);
+		
+		movimenta(speed.x*delta*Constants.pixelToMeter, speed.y*delta*Constants.pixelToMeter);
 		
 		position.x = this.getX();
 		position.y = this.getY();
@@ -104,7 +107,8 @@ public class Player extends Actor {
 		
 		if(currentFrame.isFlipX() == facingRight)currentFrame.flip(true, false);
 		
-		batch.draw(currentFrame,position.x+32,position.y+32,32,32,32,32,4,4,0);
+		batch.draw(currentFrame, getX() - 64 * Constants.pixelToMeter, getY()- 64 * Constants.pixelToMeter
+				,0,0,32,32,4 * Constants.pixelToMeter,4 * Constants.pixelToMeter,0);
 	}
 	
 	@Override
@@ -121,13 +125,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 10;
+			speed.x = 400;
 		}
 		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -10;
+			speed.x = -400;
 		}
 		else{
 			walk_delta =  0;
@@ -140,13 +144,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 200f;
+			speed.x = 400f;
 		}
 		else if(gamepad.getPov(0) == PovDirection.west){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -200f;
+			speed.x = -400f;
 		}
 		else{
 			walk_delta =  0;
@@ -156,16 +160,16 @@ public class Player extends Actor {
 		
 	}
 	
-	private void CriaCorpo(World world, int x, int y){
+	private void CriaCorpo(World world, float x, float y){
 		BodyDef bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
-	    bodyDef.position.set(x,y);
+	    bodyDef.position.set(x * Constants.pixelToMeter, y * Constants.pixelToMeter);
 	    
 	    body = world.createBody(bodyDef);
 	    
 	    PolygonShape shape = new PolygonShape();
-	    //aqui o valor eh da metade do raio do quadrado. Como o seu sprite tem 32 pixels...
-	    shape.setAsBox(16*4, 16*4);
+	    //aqui o valor eh da metade do raio do quadrado. Como o seu sprite tem 32 pixels mas escalado 4 vezes...
+	    shape.setAsBox(16 * 4 * Constants.pixelToMeter, 16 * 4 * Constants.pixelToMeter);
 	    
 	    FixtureDef fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = shape;  

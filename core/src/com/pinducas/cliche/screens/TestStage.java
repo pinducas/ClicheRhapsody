@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pinducas.cliche.actors.Player;
+import com.pinducas.cliche.core.Constants;
 import com.pinducas.cliche.core.MyGame;
 
 public class TestStage extends Stage implements Screen{
@@ -19,9 +20,10 @@ public class TestStage extends Stage implements Screen{
 	
 	public TestStage(MyGame game){
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false,800,600);
+		//Changed dimensions to meters
+		camera.setToOrtho(false,800 * Constants.pixelToMeter,600 * Constants.pixelToMeter);
 		
-		world = new World(new Vector2(0, 0), true);
+		world = new World(new Vector2(0, 0f), true);
 		
 		brender = new Box2DDebugRenderer();	
 		batch = new SpriteBatch();
@@ -30,7 +32,8 @@ public class TestStage extends Stage implements Screen{
 		
 		initController();
 		
-		player = new Player(world,gamepad, 300 , 300);
+		//PASS IN PIXEL COORDINATES BECAUSE THE CLASS CONVERTS IT TO METERS INSIDE OF IT
+		player = new Player(world,gamepad, 200 , 200);
 		
 		init();
 	}
@@ -85,7 +88,7 @@ public class TestStage extends Stage implements Screen{
 	
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(1f, 1f, 1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		//There were two calls for this method
