@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.pinducas.cliche.actors.Actor;
+import com.pinducas.cliche.actors.Box;
+import com.pinducas.cliche.actors.Circle;
 import com.pinducas.cliche.actors.Player;
 import com.pinducas.cliche.core.Constants;
 import com.pinducas.cliche.core.MyGame;
@@ -18,17 +21,22 @@ public class TestStage extends Stage implements Screen{
 	private Box2DDebugRenderer brender;
 	private Player player;
 	
+	private Actor []shapes;
+	
 	public TestStage(MyGame game){
 		camera = new OrthographicCamera();
 		//Changed dimensions to meters
-		camera.setToOrtho(false,800 * Constants.pixelToMeter,600 * Constants.pixelToMeter);
 		
-		world = new World(new Vector2(0, 0f), true);
+		world = new World(new Vector2(0, -10f), true);
 		
 		brender = new Box2DDebugRenderer();	
 		batch = new SpriteBatch();
 		
 		this.game = game;	
+		
+		shapes = new Actor[2];
+		shapes[0] = new Circle(world, 500, 200);
+		shapes[1] = new Box(world, 400,-100,800,300);
 		
 		initController();
 		
@@ -41,7 +49,8 @@ public class TestStage extends Stage implements Screen{
 	public void init(){
 		super.init();
 		//This method will start all stage variables and will be called when the player restarts a stage
-		
+		camera.setToOrtho(false,800 * Constants.pixelToMeter,600 * Constants.pixelToMeter);
+
 	}
 	
 	@Override
@@ -71,7 +80,7 @@ public class TestStage extends Stage implements Screen{
 	}
 	
 	private void keyboardControls(){
-		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.F4)){
 			dispose();
 			Gdx.app.exit();
 			disposed = true;

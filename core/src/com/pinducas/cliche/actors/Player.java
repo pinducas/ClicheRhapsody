@@ -36,7 +36,7 @@ public class Player extends Actor {
 	private Controller gamepad;
 	
 	public Player(World world,Controller gamepad, float x, float y){
-		CriaCorpo(world, x, y);
+		criaCorpo(world, x, y);
 		
 		this.gamepad = gamepad;
 		
@@ -92,10 +92,10 @@ public class Player extends Actor {
 		else if(state == WALK){
 			walk_delta += delta;
 		}
-		
-		System.out.println(speed.x*delta*Constants.pixelToMeter);
-		
-		movimenta(speed.x*delta*Constants.pixelToMeter, speed.y*delta*Constants.pixelToMeter);
+			
+		//TESTING
+		body.setLinearVelocity(speed.x*Constants.pixelToMeter, body.getLinearVelocity().y);
+		//movimenta(speed.x*delta*Constants.pixelToMeter, speed.y*delta*Constants.pixelToMeter);
 		
 		position.x = this.getX();
 		position.y = this.getY();
@@ -125,13 +125,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 400;
+			speed.x = 300;
 		}
 		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -400;
+			speed.x = -300;
 		}
 		else{
 			walk_delta =  0;
@@ -144,13 +144,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 400f;
+			speed.x = 300f;
 		}
 		else if(gamepad.getPov(0) == PovDirection.west){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -400f;
+			speed.x = -300f;
 		}
 		else{
 			walk_delta =  0;
@@ -160,7 +160,7 @@ public class Player extends Actor {
 		
 	}
 	
-	private void CriaCorpo(World world, float x, float y){
+	private void criaCorpo(World world, float x, float y){
 		BodyDef bodyDef = new BodyDef();  
 	    bodyDef.type = BodyType.DynamicBody;  
 	    bodyDef.position.set(x * Constants.pixelToMeter, y * Constants.pixelToMeter);
