@@ -25,7 +25,7 @@ public class Circle extends Actor{
 	@Override
 	public void draw(SpriteBatch batch){
 		if(currentFrame != null){
-			batch.draw(currentFrame,getX()- 16*Constants.pixelToMeter, getY()-28*Constants.pixelToMeter
+			batch.draw(currentFrame,getX()- 16*Constants.pixelToMeter, getY()-16*Constants.pixelToMeter
 				,16*Constants.pixelToMeter,16*Constants.pixelToMeter,32*Constants.pixelToMeter,32*Constants.pixelToMeter,3,3,
 				(float)Math.toDegrees(body.getAngle()));
 		}
@@ -47,6 +47,8 @@ public class Circle extends Actor{
 	    fixtureDef.density = 20f;  
 	    fixtureDef.friction = 1f; 
 	    fixtureDef.restitution = 0.4f;
+	    
+	    body.setUserData("circle");
 	    
 	    body.createFixture(fixtureDef);
 	   

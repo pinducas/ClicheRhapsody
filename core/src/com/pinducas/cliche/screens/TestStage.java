@@ -17,6 +17,7 @@ import com.pinducas.cliche.actors.Circle;
 import com.pinducas.cliche.actors.Player;
 import com.pinducas.cliche.core.Constants;
 import com.pinducas.cliche.core.MyGame;
+import com.pinducas.cliche.tools.ContactListenerTest;
 
 public class TestStage extends Stage implements Screen{
 	
@@ -26,6 +27,8 @@ public class TestStage extends Stage implements Screen{
 	private Actor []shapes;
 	
 	private Texture skull;
+	
+	private ContactListenerTest listener;
 	
 	public TestStage(MyGame game){
 		camera = new OrthographicCamera();
@@ -49,6 +52,9 @@ public class TestStage extends Stage implements Screen{
 		//PASS IN PIXEL COORDINATES BECAUSE THE CLASS CONVERTS IT TO METERS INSIDE OF IT
 		player = new Player(world,gamepad, 200 , 200);
 		
+		listener = new ContactListenerTest(player);
+		world.setContactListener(listener);
+		
 		init();
 	}
 	
@@ -67,9 +73,7 @@ public class TestStage extends Stage implements Screen{
 		player.update(delta);
 		
 		for(Actor a:shapes)a.update(delta);
-		
-		System.out.println("Player "+player.getX()+" Camera "+camera.position.x);
-		
+				
 		if(player.getX() > camera.position.x + 5)camera.translate(player.getX()-camera.position.x-5,0);
 		if(player.getX() < camera.position.x - 5)camera.translate(player.getX()-camera.position.x+5,0);
 		

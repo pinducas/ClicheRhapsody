@@ -20,6 +20,7 @@ public class Player extends Actor {
 	public final int IDLE = 0, WALK = 1;
 	
 	private boolean pressing_jump;
+	public boolean grounded;
 	
 	private int state;
 	private int subState;
@@ -76,10 +77,14 @@ public class Player extends Actor {
 		pressing_jump = false;
 		
 		facingRight = true;
+		
+		grounded = false;
 	}
 	
 	@Override
 	public void update(float delta){		
+		
+		//System.out.println(grounded);
 		
 		if(gamepad == null)keyboardControl();
 		else gamepadControl();
@@ -103,6 +108,7 @@ public class Player extends Actor {
 		
 		position.x = this.getX();
 		position.y = this.getY();
+		
 	}
 	
 	@Override
@@ -111,8 +117,8 @@ public class Player extends Actor {
 		
 		if(currentFrame.isFlipX() == facingRight)currentFrame.flip(true, false);
 		
-		batch.draw(currentFrame, getX() - 16 * Constants.pixelToMeter, getY()- 48 * Constants.pixelToMeter
-				,16*Constants.pixelToMeter,0,32* Constants.pixelToMeter,32* Constants.pixelToMeter,4,4 ,0);
+		batch.draw(currentFrame, getX() - 16 * Constants.pixelToMeter, getY()- 36 * Constants.pixelToMeter
+				,16*Constants.pixelToMeter,0,32* Constants.pixelToMeter,32* Constants.pixelToMeter,3,3 ,0);
 	}
 	
 	@Override
@@ -142,8 +148,9 @@ public class Player extends Actor {
 			state = IDLE;
 			speed.x = 0;
 		}
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-			body.applyLinearImpulse(0, 30, 0, 0, true);
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && grounded){
+			body.applyLinearImpulse(0, 18, 0, 0, true);
+			grounded = false;
 		}
 	}
 	private void gamepadControl(){
@@ -181,7 +188,7 @@ public class Player extends Actor {
 	    
 	    PolygonShape shape = new PolygonShape();
 	    //aqui o valor eh da metade do raio do quadrado. Como o seu sprite tem 32 pixels mas escalado 4 vezes...
-	    shape.setAsBox(10 * 4 * Constants.pixelToMeter, 12 * 4 * Constants.pixelToMeter);
+	    shape.setAsBox(10 * 3 * Constants.pixelToMeter, 12 * 3 * Constants.pixelToMeter);
 	    
 	    FixtureDef fixtureDef = new FixtureDef();  
 	    fixtureDef.shape = shape;  
@@ -190,7 +197,8 @@ public class Player extends Actor {
 	    fixtureDef.restitution = 0f;
 	    
 	    body.createFixture(fixtureDef);
-	    body.setFixedRotation(true);	    
+	    body.setFixedRotation(true);	
+	    body.setUserData("player");
 	   
 	    shape.dispose();
 	}

@@ -33,6 +33,8 @@ public class Box extends Actor{
 	    body.createFixture(fixtureDef);
 	    body.setFixedRotation(true);	    
 	   
+	    body.setUserData("ground");
+	    
 	    shape.dispose();
 	}
 	
