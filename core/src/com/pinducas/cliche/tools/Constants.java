@@ -1,4 +1,4 @@
-package com.pinducas.cliche.core;
+package com.pinducas.cliche.tools;
 
 public class Constants {
 
