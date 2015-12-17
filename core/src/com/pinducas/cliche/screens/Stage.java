@@ -4,18 +4,16 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pinducas.cliche.core.MyGame;
+import com.pinducas.cliche.map.Map;
+import com.pinducas.cliche.tools.Const;
 
 public class Stage {
 	
-	protected final float BOX_TIME_STEP = 1/60.f;
-	protected final int BOX_VELOCITY_ITERATIONS = 6;
-	protected final int BOX_POSITION_ITERATIONS = 2;
-	
 	//PRIMITIVES
 	public boolean disposed;
-		
 	protected float acumulator;
 	
 	//NULLABLE
@@ -26,6 +24,8 @@ public class Stage {
 	//DISPOSABLE
 	protected World world;
 	protected SpriteBatch batch;
+	protected Box2DDebugRenderer b2dRenderer;
+	protected Map map;
 	
 	public void initController(){
 		Controller c = null;
@@ -39,9 +39,9 @@ public class Stage {
 		//LIBGDX doc says this is good for slower machines
 		float frameTime = Math.min(delta, 0.25f);
 		acumulator += frameTime;
-		while(acumulator >= BOX_TIME_STEP){
-		      world.step(BOX_TIME_STEP,BOX_VELOCITY_ITERATIONS,BOX_POSITION_ITERATIONS);
-		      acumulator -= BOX_TIME_STEP;
+		while(acumulator >= Const.BOX_TIME_STEP){
+		      world.step(Const.BOX_TIME_STEP,Const.BOX_VELOCITY_ITERATIONS,Const.BOX_POSITION_ITERATIONS);
+		      acumulator -= Const.BOX_TIME_STEP;
 		}
 	}
 	
@@ -58,4 +58,17 @@ public class Stage {
 	public void draw(){
 	
 	}
+	
+	public void dispose(){
+		disposed = true;
+		game = null;
+		camera = null;
+		gamepad = null;
+		batch.dispose();
+		map.dispose();
+		b2dRenderer.dispose();
+		world.dispose();
+		
+	}
+	
 }

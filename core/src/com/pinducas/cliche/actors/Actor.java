@@ -3,18 +3,19 @@ package com.pinducas.cliche.actors;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.pinducas.cliche.tools.GameObject;
 
-public class Actor {
+public class Actor extends GameObject{
 	
 	public boolean facingRight;	
 	
 	//NULLABLE
 	public TextureRegion currentFrame;
-	protected Body body;	
-
+	public Body body;	
+	
 	//DISPOSABLE
 	
-	protected void movimenta(float x, float y){
+	protected void translate(float x, float y){
 		body.setTransform(getX() + x, getY() + y, 0);
 	}
 	

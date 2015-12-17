@@ -11,42 +11,32 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pinducas.cliche.actors.Player;
 import com.pinducas.cliche.core.MyGame;
-import com.pinducas.cliche.tools.Constants;
-import com.pinducas.cliche.tools.ContactListenerTest;
+import com.pinducas.cliche.map.Map;
+import com.pinducas.cliche.tools.Const;
 
 public class TestStage extends Stage implements Screen{
 	
-	private Box2DDebugRenderer brender;
 	private Player player;
 	
-	private ContactListenerTest listener;
-	
 	public TestStage(MyGame game){
+		this.game = game;
 		camera = new OrthographicCamera();
-		//Changed dimensions to meters
-		
-		world = new World(new Vector2(0, 0), true);
-		
-		brender = new Box2DDebugRenderer();	
+		world = new World(new Vector2(0, -10), true);
+		b2dRenderer = new Box2DDebugRenderer();	
 		batch = new SpriteBatch();
 		
-		this.game = game;	
-			
 		initController();
 		
-		//PASS IN PIXEL COORDINATES BECAUSE THE CLASS CONVERTS IT TO METERS INSIDE OF IT
 		player = new Player(world,gamepad, 200 , 200);
 		
-		listener = new ContactListenerTest(player);
-		world.setContactListener(listener);
-		
+		map = new Map(world,player, camera);
+				
 		init();
 	}
 	
 	public void init(){
 		super.init();
-		//This method will start all stage variables and will be called when the player restarts a stage
-		camera.setToOrtho(false,800 * Constants.pixelToMeter,600 * Constants.pixelToMeter);
+		camera.setToOrtho(false,1280 * Const.pixelToMeter,720 * Const.pixelToMeter);
 
 	}
 	
@@ -54,11 +44,9 @@ public class TestStage extends Stage implements Screen{
 	public void update(float delta){
 		worldStep(delta);
 		
-		//Do the update here		
+		map.update(delta);
+		
 		player.update(delta);
-					
-		if(player.getX() > camera.position.x + 5)camera.translate(player.getX()-camera.position.x-5,0);
-		if(player.getX() < camera.position.x - 5)camera.translate(player.getX()-camera.position.x+5,0);
 		
 		camera.update();
 		
@@ -70,12 +58,13 @@ public class TestStage extends Stage implements Screen{
 	public void draw(){
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		//Draw here	
+				
+		map.draw(batch);
 		
 		player.draw(batch);
 		
 		batch.end();
-		brender.render(world, camera.combined);
+		//b2dRenderer.render(world, camera.combined);
 
 	}
 	
@@ -88,11 +77,13 @@ public class TestStage extends Stage implements Screen{
 	}
 	
 	private void gamepadControls(){
+		if(gamepad.getAxis(0) > 0.2f)camera.translate(new Vector2(0.1f,0));
+		if(gamepad.getAxis(0) < -0.2f)camera.translate(new Vector2(-0.1f,0));
 		if(gamepad.getButton(8)){
 			dispose();
 			Gdx.app.exit();
-			disposed = true;
 		}
+	
 	}
 	
 	@Override
@@ -100,24 +91,16 @@ public class TestStage extends Stage implements Screen{
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		//There were two calls for this method
-		//brender.render(world, camera.combined);
+		Gdx.graphics.setTitle(""+Gdx.graphics.getFramesPerSecond());
 		
-		//As i nulled and disposed some box2d elements lets leave this one here as well
 		update(delta);
-		//This statement makes sure no disposed object is drawn
 		if(disposed)return;
 		draw();
 	}
 
 	@Override
 	public void dispose() {
-		game = null;
-		camera = null;
-		gamepad = null;
-		brender.dispose();
-		world.dispose();
-		batch.dispose();
+		super.dispose();
 		player.dispose();
 	}
 	

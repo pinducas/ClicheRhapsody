@@ -9,12 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.pinducas.cliche.tools.Constants;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.pinducas.cliche.tools.Const;	
 
 public class Player extends Actor {
 	public final int IDLE = 0, WALK = 1;
@@ -33,15 +29,17 @@ public class Player extends Actor {
 	//DISPOSABLE
 	private Texture sheet;
 	
-	//NULLABLE
-	public TextureRegion currentFrame;
+	//NULLABLE		
 	private Animation walk_animation;
 	private Controller gamepad;
 	
 	public Player(World world,Controller gamepad, float x, float y){
-		criaCorpo(world, x, y);
+		body = Const.createDynamicBox(world,this, x, y,60,72,1,0,0,false);
 		
 		this.gamepad = gamepad;
+		
+		this.id = Const.PLAYER;
+		this.name = "Player";
 		
 		//IMAGE LOADING
 		sheet = new Texture(Gdx.files.internal("Teste/Sheet.png"));
@@ -89,22 +87,14 @@ public class Player extends Actor {
 		if(gamepad == null)keyboardControl();
 		else gamepadControl();
 		
-		//STATE HANDLING
 		if(state == IDLE){
-			if(subState == 0){
-				//HERE HE COULD BE IN IDLE
-			}
-			else if(subState == 1){
-				//HERE HE COULD SLEEP BECAUSE THE PLAYER WAS STILL FOR TOO LONG
-			}
+		
 		}
 		else if(state == WALK){
 			walk_delta += delta;
 		}
 			
-		//TESTING
-		body.setLinearVelocity(speed.x*Constants.pixelToMeter, body.getLinearVelocity().y);
-		//movimenta(speed.x*delta*Constants.pixelToMeter, speed.y*delta*Constants.pixelToMeter);
+		body.setLinearVelocity(speed.x*Const.pixelToMeter, body.getLinearVelocity().y);
 		
 		position.x = this.getX();
 		position.y = this.getY();
@@ -117,8 +107,8 @@ public class Player extends Actor {
 		
 		if(currentFrame.isFlipX() == facingRight)currentFrame.flip(true, false);
 		
-		batch.draw(currentFrame, getX() - 16 * Constants.pixelToMeter, getY()- 36 * Constants.pixelToMeter
-				,16*Constants.pixelToMeter,0,32* Constants.pixelToMeter,32* Constants.pixelToMeter,3,3 ,0);
+		batch.draw(currentFrame, getX() - 16 * Const.pixelToMeter, getY()- 37 * Const.pixelToMeter
+				,16*Const.pixelToMeter,0,32* Const.pixelToMeter,32* Const.pixelToMeter,3,3 ,0);
 	}
 	
 	@Override
@@ -135,13 +125,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 300;
+			speed.x = 400;
 		}
 		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -300;
+			speed.x = -400;
 		}
 		else{
 			walk_delta =  0;
@@ -158,49 +148,27 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 300f;
+			speed.x = 400f;
 		}
 		else if(gamepad.getPov(0) == PovDirection.west){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -300f;
+			speed.x = -400f;
 		}
 		else{
 			walk_delta =  0;
 			state = IDLE;
 			speed.x = 0;
 		}
-		if(gamepad.getButton(2) && !pressing_jump){
-			body.applyLinearImpulse(0, 30, 0, 0, true);
+		if(gamepad.getButton(2) && !pressing_jump && grounded){
+			body.applyLinearImpulse(0, 8, 0, 0, true);
+			translate(0, 2*Const.pixelToMeter);
+			grounded = false;
 			pressing_jump = true;
 		}
 		if(!gamepad.getButton(2))pressing_jump = false;
 		
-	}
-	
-	private void criaCorpo(World world, float x, float y){
-		BodyDef bodyDef = new BodyDef();  
-	    bodyDef.type = BodyType.DynamicBody;  
-	    bodyDef.position.set(x * Constants.pixelToMeter, y * Constants.pixelToMeter);
-	    
-	    body = world.createBody(bodyDef);
-	    
-	    PolygonShape shape = new PolygonShape();
-	    //aqui o valor eh da metade do raio do quadrado. Como o seu sprite tem 32 pixels mas escalado 4 vezes...
-	    shape.setAsBox(10 * 3 * Constants.pixelToMeter, 12 * 3 * Constants.pixelToMeter);
-	    
-	    FixtureDef fixtureDef = new FixtureDef();  
-	    fixtureDef.shape = shape;  
-	    fixtureDef.density = 1f;  
-	    fixtureDef.friction = 0f;  
-	    fixtureDef.restitution = 0f;
-	    
-	    body.createFixture(fixtureDef);
-	    body.setFixedRotation(true);	
-	    body.setUserData("player");
-	   
-	    shape.dispose();
 	}
 	
 }
