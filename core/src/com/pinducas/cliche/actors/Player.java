@@ -34,7 +34,7 @@ public class Player extends Actor {
 	private Controller gamepad;
 	
 	public Player(World world,Controller gamepad, float x, float y){
-		body = Const.createDynamicBox(world,this, x, y,60,72,1,0,0,false);
+		body = Const.createDynamicBox(world,this, x, y,60,72,0,0,0,false);
 		
 		this.gamepad = gamepad;
 		

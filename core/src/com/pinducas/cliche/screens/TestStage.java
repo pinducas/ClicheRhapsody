@@ -79,6 +79,8 @@ public class TestStage extends Stage implements Screen{
 	private void gamepadControls(){
 		if(gamepad.getAxis(0) > 0.2f)camera.translate(new Vector2(0.1f,0));
 		if(gamepad.getAxis(0) < -0.2f)camera.translate(new Vector2(-0.1f,0));
+		if(gamepad.getAxis(1) > 0.2f)camera.translate(new Vector2(0,-0.1f));
+		if(gamepad.getAxis(1) < -0.2f)camera.translate(new Vector2(0f,0.1f));
 		if(gamepad.getButton(8)){
 			dispose();
 			Gdx.app.exit();

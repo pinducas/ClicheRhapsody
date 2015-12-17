@@ -23,10 +23,10 @@ public class Tile extends GameObject{
 	}
 	
 	public void update(OrthographicCamera camera){
-		double dist = Math.pow(body.getPosition().x - camera.position.x,2) + Math.pow(body.getPosition().y, camera.position.y);
+		double dist = Math.pow(body.getPosition().x - camera.position.x,2) + Math.pow(body.getPosition().y- camera.position.y,2);
 		dist = Math.sqrt(dist);
 		
-		if(dist < camera.viewportWidth*1.4f+48){
+		if(dist < camera.viewportWidth*0.55f+48*Const.pixelToMeter){
 			active = true;
 		}
 		else active = false;
@@ -36,7 +36,7 @@ public class Tile extends GameObject{
 	
 	public void draw(SpriteBatch batch){
 		if(active){
-			batch.draw(region, body.getPosition().x - 48* Const.pixelToMeter, body.getPosition().y - 48* Const.pixelToMeter
+			batch.draw(region, body.getPosition().x - 48* Const.pixelToMeter, body.getPosition().y - 50* Const.pixelToMeter
 					,0 ,0,32 * Const.pixelToMeter, 32 * Const.pixelToMeter,3,3,0);
 		}
 		

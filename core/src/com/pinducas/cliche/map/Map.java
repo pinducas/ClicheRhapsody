@@ -35,6 +35,12 @@ public class Map {
 		for(int i = 0; i < 15; i++)
 			tiles[i] = new Tile(world,new TextureRegion(tileSheet,32,0,32,32), 100+96*i, 100);
 		
+		itens = new Item[3];
+		itens[0] = new Item(world,new TextureRegion(tileSheet,32*11,32*11,32,32), 140+96*5, 380);
+		itens[1] = new Item(world,new TextureRegion(tileSheet,32*11,32*11,32,32), 60+96*5, 220);
+		itens[2] = new Item(world,new TextureRegion(tileSheet,32*11,32*11,32,32), 220+96*5, 220);
+
+		
 		listener = new ContactListenerTest(jogador);
 		world.setContactListener(listener);
 		
@@ -46,17 +52,18 @@ public class Map {
 	}
 	
 	public void update(float delta){
-		for(Tile t:tiles)t.update(camera);;
+		for(Tile t:tiles)t.update(camera);
+		for(Item i:itens)i.update(camera);
 	}
 	
 	public void draw(SpriteBatch batch){
 		for(Tile t:tiles)t.draw(batch);
-		
+		for(Item i:itens)i.draw(batch);
+
 	}
 	
 	public void dispose(){
-		if(itens.length > 0)
-			for(Item i:itens)i.dispose();
+		
 	}
 	
 	public void loadMap(){
