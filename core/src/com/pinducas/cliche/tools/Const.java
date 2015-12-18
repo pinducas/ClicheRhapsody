@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Const {
 	
-	public static final int PLAYER = 0, TILE = 1;
+	public static final int PLAYER = 0, TILE = 1,PLATFORM = 2;
 	
 	public static final float pixelToMeter = 20f/1280f;
 	public static final float meterToPixel = 1280f/20f;

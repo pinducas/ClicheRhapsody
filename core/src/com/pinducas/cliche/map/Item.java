@@ -39,7 +39,7 @@ public class Item extends GameObject{
 	
 	public void draw(SpriteBatch batch){
 		if(active){
-			batch.draw(region, body.getPosition().x - 16* Const.pixelToMeter, body.getPosition().y -  16* Const.pixelToMeter
+			batch.draw(region, body.getPosition().x - 16* Const.pixelToMeter, body.getPosition().y -  18* Const.pixelToMeter
 					,16*Const.pixelToMeter,16*Const.pixelToMeter,32 * Const.pixelToMeter, 32 * Const.pixelToMeter,3,3,(float)Math.toDegrees(body.getAngle()));
 		}
 		

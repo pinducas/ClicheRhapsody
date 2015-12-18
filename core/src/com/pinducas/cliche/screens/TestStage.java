@@ -29,7 +29,7 @@ public class TestStage extends Stage implements Screen{
 		
 		player = new Player(world,gamepad, 200 , 200);
 		
-		map = new Map(world,player, camera);
+		map = new Map(world,player, camera,"Maps/testmap.map");
 				
 		init();
 	}
@@ -64,7 +64,7 @@ public class TestStage extends Stage implements Screen{
 		player.draw(batch);
 		
 		batch.end();
-		//b2dRenderer.render(world, camera.combined);
+		b2dRenderer.render(world, camera.combined);
 
 	}
 	

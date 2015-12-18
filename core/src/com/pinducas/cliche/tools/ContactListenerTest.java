@@ -1,5 +1,6 @@
 package com.pinducas.cliche.tools;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -19,7 +20,10 @@ public class ContactListenerTest implements ContactListener {
 		GameObject a = (GameObject)contact.getFixtureA().getBody().getUserData();
 		GameObject b = (GameObject)contact.getFixtureB().getBody().getUserData();
 		
-		if(a.id == Const.PLAYER && b.id == Const.TILE && player.body.getLinearVelocity().y == 0){
+		Body bb = contact.getFixtureB().getBody();
+		
+		if(a.id == Const.PLAYER && b.id == Const.PLATFORM && 
+				player.getY()-34*Const.pixelToMeter > bb.getPosition().y + 48*Const.pixelToMeter){
 			player.grounded = true;			
 		}
 		

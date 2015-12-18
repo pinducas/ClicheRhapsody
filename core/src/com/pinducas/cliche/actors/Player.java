@@ -81,6 +81,7 @@ public class Player extends Actor {
 	
 	@Override
 	public void update(float delta){		
+		if(body.getLinearVelocity().y != 0)grounded = false;
 		
 		//System.out.println(grounded);
 		
@@ -95,7 +96,7 @@ public class Player extends Actor {
 		}
 			
 		body.setLinearVelocity(speed.x*Const.pixelToMeter, body.getLinearVelocity().y);
-		
+				
 		position.x = this.getX();
 		position.y = this.getY();
 		
@@ -125,21 +126,22 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 400;
+			speed.x = 280;
 		}
 		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -400;
+			speed.x = -280;
 		}
 		else{
 			walk_delta =  0;
 			state = IDLE;
 			speed.x = 0;
 		}
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && grounded){
-			body.applyLinearImpulse(0, 18, 0, 0, true);
+		if(Gdx.input.isKeyJustPressed(Input.Keys.Z) && grounded){
+			body.applyLinearImpulse(0, 6, 0, 0, true);
+			translate(0, 0.1f);
 			grounded = false;
 		}
 	}
@@ -148,13 +150,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 400f;
+			speed.x = 280f;
 		}
 		else if(gamepad.getPov(0) == PovDirection.west){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -400f;
+			speed.x = -280f;
 		}
 		else{
 			walk_delta =  0;
@@ -162,7 +164,7 @@ public class Player extends Actor {
 			speed.x = 0;
 		}
 		if(gamepad.getButton(2) && !pressing_jump && grounded){
-			body.applyLinearImpulse(0, 8, 0, 0, true);
+			body.applyLinearImpulse(0, 6, 0, 0, true);
 			translate(0, 2*Const.pixelToMeter);
 			grounded = false;
 			pressing_jump = true;

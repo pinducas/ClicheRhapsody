@@ -36,7 +36,7 @@ public class Tile extends GameObject{
 	
 	public void draw(SpriteBatch batch){
 		if(active){
-			batch.draw(region, body.getPosition().x - 48* Const.pixelToMeter, body.getPosition().y - 50* Const.pixelToMeter
+			batch.draw(region, body.getPosition().x - 48* Const.pixelToMeter, body.getPosition().y - 48* Const.pixelToMeter
 					,0 ,0,32 * Const.pixelToMeter, 32 * Const.pixelToMeter,3,3,0);
 		}
 		
