@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		config.width = 1024;
 		config.height = 576;
 		config.useGL30 = false;
-		config.title = "Cliche Stuff";
+		config.title = "Cliche Stuf5f";
 		new LwjglApplication(new MyGame(), config);
 	}
 }
