@@ -27,10 +27,9 @@ public class TestStage extends Stage implements Screen{
 		
 		initController();
 		
-		player = new Player(world,null, 200 , 200);
+		player = new Player(world,gamepad, 200 , 200);
 		
-		map = new Map(world,player, camera,gamepad,"Maps/testmap.map");
-		map.editMode = true;		
+		map = new Map(world,player, camera,"Maps/testmap.map");
 		
 		init();
 	}

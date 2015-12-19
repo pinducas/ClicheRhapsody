@@ -23,7 +23,7 @@ public class ContactListenerTest implements ContactListener {
 		Body bb = contact.getFixtureB().getBody();
 		
 		if(a.id == Const.PLAYER && b.id == Const.PLATFORM && 
-				player.getY()-34*Const.pixelToMeter > bb.getPosition().y + 48*Const.pixelToMeter){
+				player.getY()-26*Const.pixelToMeter > bb.getPosition().y + 36*Const.pixelToMeter){
 			player.grounded = true;			
 		}
 		

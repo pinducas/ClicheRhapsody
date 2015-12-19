@@ -18,7 +18,7 @@ public class Tile extends GameObject{
 		id = Const.TILE;
 		name = "tile";
 		this.region = region;
-		body = Const.createStaticBox(world, this, x, y, 96, 96, 10, 0);
+		body = Const.createStaticBox(world, this, x, y, 72, 72, 10, 0);
 		active = false;
 	}
 	
@@ -26,7 +26,7 @@ public class Tile extends GameObject{
 		double dist = Math.pow(body.getPosition().x - camera.position.x,2) + Math.pow(body.getPosition().y- camera.position.y,2);
 		dist = Math.sqrt(dist);
 		
-		if(dist < camera.viewportWidth*0.55f+48*Const.pixelToMeter){
+		if(dist < camera.viewportWidth*0.55f+36*Const.pixelToMeter){
 			active = true;
 		}
 		else active = false;
@@ -36,8 +36,8 @@ public class Tile extends GameObject{
 	
 	public void draw(SpriteBatch batch){
 		if(active){
-			batch.draw(region, body.getPosition().x - 48* Const.pixelToMeter, body.getPosition().y - 48* Const.pixelToMeter
-					,0 ,0,32 * Const.pixelToMeter, 32 * Const.pixelToMeter,3,3,0);
+			batch.draw(region, body.getPosition().x - 36* Const.pixelToMeter, body.getPosition().y - 36* Const.pixelToMeter
+					,0 ,0,32 * Const.pixelToMeter, 32 * Const.pixelToMeter,2,2,0);
 		}
 		
 	}
