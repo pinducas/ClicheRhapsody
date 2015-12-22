@@ -1,5 +1,7 @@
 package com.pinducas.cliche.actors;
 
+import javax.swing.JOptionPane;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controller;
@@ -95,7 +97,7 @@ public class Player extends Actor {
 			walk_delta += delta;
 		}
 			
-		body.setLinearVelocity(speed.x*Const.pixelToMeter, body.getLinearVelocity().y);
+		body.setLinearVelocity(speed.x*Const.pixelToMeter*delta, body.getLinearVelocity().y);
 				
 		position.x = this.getX();
 		position.y = this.getY();
@@ -126,13 +128,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 280;
+			speed.x = 12000;
 		}
 		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -280;
+			speed.x = -12000;
 		}
 		else{
 			walk_delta =  0;

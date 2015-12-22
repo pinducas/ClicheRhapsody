@@ -10,6 +10,8 @@ import com.pinducas.cliche.core.MyGame;
 import com.pinducas.cliche.map.Map;
 import com.pinducas.cliche.tools.Const;
 
+import box2dLight.RayHandler;
+
 public class Stage {
 	
 	//PRIMITIVES
@@ -26,6 +28,7 @@ public class Stage {
 	protected SpriteBatch batch;
 	protected Box2DDebugRenderer b2dRenderer;
 	protected Map map;
+	protected RayHandler rayHandler;
 	
 	public void initController(){
 		Controller c = null;
@@ -42,6 +45,17 @@ public class Stage {
 		while(acumulator >= Const.BOX_TIME_STEP){
 		      world.step(Const.BOX_TIME_STEP,Const.BOX_VELOCITY_ITERATIONS,Const.BOX_POSITION_ITERATIONS);
 		      acumulator -= Const.BOX_TIME_STEP;
+		}
+	}
+	
+	public void worldAndHandlerStep(float delta){
+		//LIBGDX doc says this is good for slower machines
+		float frameTime = Math.min(delta, 0.25f);
+		acumulator += frameTime;
+		while(acumulator >= Const.BOX_TIME_STEP){
+		      world.step(Const.BOX_TIME_STEP,Const.BOX_VELOCITY_ITERATIONS,Const.BOX_POSITION_ITERATIONS);
+		      acumulator -= Const.BOX_TIME_STEP;
+		      rayHandler.update();
 		}
 	}
 	
@@ -64,10 +78,11 @@ public class Stage {
 		game = null;
 		camera = null;
 		gamepad = null;
-		batch.dispose();
-		map.dispose();
-		b2dRenderer.dispose();
-		world.dispose();
+		if(rayHandler!=null)rayHandler.dispose();
+		if(batch!=null)batch.dispose();
+		if(map!=null)map.dispose();
+		if(b2dRenderer!=null)b2dRenderer.dispose();
+		if(world!=null)world.dispose();
 		
 	}
 	
