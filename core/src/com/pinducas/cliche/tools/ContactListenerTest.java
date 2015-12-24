@@ -24,7 +24,8 @@ public class ContactListenerTest implements ContactListener {
 		
 		if(a.id == Const.PLAYER && b.id == Const.PLATFORM && 
 				player.getY()-26*Const.pixelToMeter > bb.getPosition().y + 36*Const.pixelToMeter){
-			player.grounded = true;			
+			player.grounded = true;
+			player.body.setLinearVelocity(player.body.getLinearVelocity().x, 0);
 		}
 		
 	}
