@@ -1,7 +1,5 @@
 package com.pinducas.cliche.screens;
 
-import javax.swing.JOptionPane;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -31,8 +29,6 @@ public class TestStage extends Stage implements Screen{
 	private boolean showBoxes;
 	private boolean showLight;
 	
-	private boolean showInstructions;
-	
 	public TestStage(MyGame game){
 		this.game = game;
 		camera = new OrthographicCamera();
@@ -47,9 +43,7 @@ public class TestStage extends Stage implements Screen{
 		map = new Map(world,player, camera,"Maps/ponte.map");
 		
 		
-		stageLight = 0.1f;
 		rayHandler = new RayHandler(world);
-		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, stageLight);
 		rayHandler.setShadows(true);
 		
 		lights = new PointLight[4];
@@ -73,7 +67,8 @@ public class TestStage extends Stage implements Screen{
 		camera.setToOrtho(false,1280 * Const.pixelToMeter,720 * Const.pixelToMeter);
 		showBoxes = false;
 		showLight = true;
-		showInstructions = false;
+		stageLight = 0.1f;
+		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, stageLight);
 	}
 	
 	@Override
@@ -99,15 +94,16 @@ public class TestStage extends Stage implements Screen{
 			showLight = !showLight;
 		}
 		
-		if(player.getX() > 42 && !showInstructions){
-			JOptionPane.showMessageDialog(null, "Press F1 and F2 to understand how it works. All but the lights made with the editor. Next step with the editor is create a Control z function and add the lights tool!");
-			showInstructions = true;
-		}
-
 		
 		if(player.getX() > 26.5f && stageLight < 1){
 			stageLight += delta*0.5f;
 			if(stageLight > 1)stageLight = 1;
+			rayHandler.setAmbientLight(new Color(stageLight*0.05f,0,stageLight*0.02f,stageLight));
+		}
+		
+		if(player.getX() < 26 && stageLight > 0.1f){
+			stageLight -= delta*0.5f;
+			if(stageLight < 0.1f)stageLight = 0.1f;
 			rayHandler.setAmbientLight(new Color(stageLight*0.05f,0,stageLight*0.02f,stageLight));
 		}
 		
@@ -145,10 +141,6 @@ public class TestStage extends Stage implements Screen{
 	}
 	
 	private void gamepadControls(){
-		if(gamepad.getAxis(0) > 0.2f)camera.translate(new Vector2(0.1f,0));
-		if(gamepad.getAxis(0) < -0.2f)camera.translate(new Vector2(-0.1f,0));
-		if(gamepad.getAxis(1) > 0.2f)camera.translate(new Vector2(0,-0.1f));
-		if(gamepad.getAxis(1) < -0.2f)camera.translate(new Vector2(0f,0.1f));
 		if(gamepad.getButton(8)){
 			dispose();
 			Gdx.app.exit();

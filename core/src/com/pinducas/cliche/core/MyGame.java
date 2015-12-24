@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.pinducas.cliche.screens.TestStage;
 
 public class MyGame extends Game {
-	
+		
 	@Override
 	public void create () {
 		setScreen(new TestStage(this));		

@@ -114,7 +114,7 @@ public class Player extends Actor {
 			walk_delta += delta;
 		}
 					
-		body.setLinearVelocity(speed.x*Const.pixelToMeter*delta, body.getLinearVelocity().y);
+		body.setLinearVelocity(speed.x*Const.pixelToMeter*delta*10f, body.getLinearVelocity().y);
 				
 		position.x = this.getX();
 		position.y = this.getY();
@@ -145,13 +145,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 12000;
+			speed.x = 1200;
 		}
 		else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -12000;
+			speed.x = -1200;
 		}
 		else{
 			walk_delta =  0;
@@ -169,13 +169,13 @@ public class Player extends Actor {
 			facingRight = true;
 			state = WALK;
 			subState = 0;
-			speed.x = 280f;
+			speed.x = 1200f;
 		}
 		else if(gamepad.getPov(0) == PovDirection.west){
 			facingRight = false;
 			state = WALK;
 			subState = 0;
-			speed.x = -280f;
+			speed.x = -1200f;
 		}
 		else{
 			walk_delta =  0;
